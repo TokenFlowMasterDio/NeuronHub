@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 # Load model and tokenizer
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
+MODEL_NAME = "teknium/OpenHermes-2.5-Mistral-7B"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
@@ -21,8 +21,7 @@ def generate_response(prompt, temperature, max_tokens):
         do_sample=True,
         pad_token_id=tokenizer.eos_token_id
     )
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return response[len(prompt):].strip()
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 # Gradio interface
 def launch_interface():
@@ -34,11 +33,10 @@ def launch_interface():
             gr.Slider(50, 512, step=10, value=200, label="Max New Tokens")
         ],
         outputs=gr.Textbox(label="Response"),
-        title="🤖 Mistral Chatbot (7B)",
+        title="🧠 NeuronHub",
         theme=gr.themes.Soft(),
         css=".footer {visibility: hidden;}"
     ).launch()
 
 if __name__ == "__main__":
     launch_interface()
-
